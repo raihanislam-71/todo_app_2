@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../config/app_colors.dart';
+import '../../controllers/auth_controller.dart';
 import '../../controllers/todo_controller.dart';
 import '../widgets/todo/todo_card.dart';
 import '../widgets/todo/todo_filter.dart';
@@ -14,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   TodoController get controller => Get.find<TodoController>();
+  AuthController get authController => Get.find<AuthController>();
 
   void showAddTask() => Get.bottomSheet(
     TodoForm(onSave: controller.addTodo),
@@ -305,7 +307,12 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 16),
             const Text('User Profile', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
             const SizedBox(height: 8),
-            Text('taskly@demo.com', style: TextStyle(fontSize: 14, color: AppColors.muted)),
+            Text(
+              authController.userEmail.value.isNotEmpty
+                  ? authController.userEmail.value
+                  : 'taskly@demo.com',
+              style: TextStyle(fontSize: 14, color: AppColors.muted),
+            ),
             const SizedBox(height: 24),
             ListTile(
               leading: const Icon(Icons.settings, color: AppColors.text),
@@ -350,6 +357,7 @@ class HomeScreen extends StatelessWidget {
             ),
             onPressed: () {
               Get.back();
+              authController.userEmail.value = '';
               Get.offAll(() => LoginScreen());
             },
             child: const Text('Yes', style: TextStyle(color: Colors.white)),

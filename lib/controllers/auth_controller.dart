@@ -4,6 +4,7 @@ import '../views/screens/home_screen.dart';
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
+  final userEmail = ''.obs;
 
   // Demo-only: no authentication endpoint is provided by the Todo fake API.
   Future<void> demoLogin(String email, String password) async {
@@ -21,6 +22,7 @@ class AuthController extends GetxController {
     isLoading.value = true;
     await Future.delayed(const Duration(milliseconds: 450));
     isLoading.value = false;
+    userEmail.value = email.trim();
     Get.offAll(() => const HomeScreen());
   }
 
@@ -37,6 +39,7 @@ class AuthController extends GetxController {
     isLoading.value = true;
     await Future.delayed(const Duration(milliseconds: 450));
     isLoading.value = false;
+    userEmail.value = email.trim();
     Get.snackbar(
       'Demo account',
       'Account form validated. Authentication is not connected.',
