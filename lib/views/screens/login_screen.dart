@@ -71,11 +71,24 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              Center(
-                child: TextButton(
-                  onPressed: () => Get.to(() => SignupScreen()),
-                  child: const Text("Don't have an account? Create one"),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Don't have an account?",
+                    style: TextStyle(color: AppColors.muted, fontSize: 14),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.to(() => SignupScreen()),
+                    child: const Text(
+                      'Sign up',
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               const Center(
