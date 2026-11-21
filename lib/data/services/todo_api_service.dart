@@ -6,7 +6,9 @@ class TodoApiService {
   Future<List<TodoModel>> fetchTodos() async {
     final result = await ApiCaller.get(ApiEndpoints.todos);
     final list = result['todos'] as List? ?? [];
-    return list.map((item) => _fromDummyJson(item as Map<String, dynamic>)).toList();
+    return list
+        .map((item) => _fromDummyJson(item as Map<String, dynamic>))
+        .toList();
   }
 
   Future<TodoModel> createTodo(TodoModel todo) async {
@@ -50,19 +52,19 @@ class TodoApiService {
   }
 
   static TodoModel _fromDummyJson(Map<String, dynamic> json) => TodoModel(
-        id: (json['id'] ?? '').toString(),
-        title: (json['todo'] ?? 'Untitled').toString(),
-        description: (json['description'] ?? '').toString(),
-        status: (json['completed'] as bool?) == true ? 'Completed' : 'Not Started',
-        priority: (json['priority'] ?? 'Medium').toString(),
-        dueDate: null,
-        tags: [],
-      );
+    id: (json['id'] ?? '').toString(),
+    title: (json['todo'] ?? 'Untitled').toString(),
+    description: (json['description'] ?? '').toString(),
+    status: (json['completed'] as bool?) == true ? 'Completed' : 'Not Started',
+    priority: (json['priority'] ?? 'Medium').toString(),
+    dueDate: null,
+    tags: [],
+  );
 
   static Map<String, dynamic> _toDummyJson(TodoModel todo) => {
-        'todo': todo.title,
-        'completed': todo.isCompleted,
-        'priority': todo.priority,
-        'userId': 1,
-      };
+    'todo': todo.title,
+    'completed': todo.isCompleted,
+    'priority': todo.priority,
+    'userId': 1,
+  };
 }
