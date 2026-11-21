@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../config/app_colors.dart';
 import '../data/models/todo_model.dart';
 import '../data/services/todo_api_service.dart';
+import '../views/widgets/common/custom_snackbar.dart';
 
 class TodoController extends GetxController {
   final TodoApiService _service = TodoApiService();
@@ -55,19 +54,11 @@ class TodoController extends GetxController {
       // Track this ID as locally created since dummyjson /add doesn't persist it
       _localTodoIds.add(todoWithPriority.id);
       todos.insert(0, todoWithPriority);
-      Get.snackbar('Success', 'Task added',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: AppColors.green,
-          colorText: Colors.white);
+      AppSnackbar.showSuccess('Success', 'Task added');
       return true;
     } catch (e) {
       errorMessage.value = e.toString();
-      Get.snackbar('Failed', 'Could not add task',
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 2),
-          backgroundColor: AppColors.error,
-          colorText: Colors.white);
+      AppSnackbar.showError('Failed', 'Could not add task');
       return false;
     }
   }
@@ -80,11 +71,7 @@ class TodoController extends GetxController {
         final index = todos.indexWhere((t) => t.id == todo.id);
         if (index >= 0) {
           todos[index] = todo.copyWith(status: next);
-          Get.snackbar('Updated', 'Task status changed',
-              snackPosition: SnackPosition.BOTTOM,
-              duration: const Duration(seconds: 2),
-              backgroundColor: AppColors.primary,
-              colorText: Colors.white);
+          AppSnackbar.showInfo('Updated', 'Task status changed');
         }
         return;
       }
@@ -93,18 +80,10 @@ class TodoController extends GetxController {
       final index = todos.indexWhere((t) => t.id == todo.id);
       if (index >= 0) {
         todos[index] = updated.copyWith(priority: todo.priority);
-        Get.snackbar('Updated', 'Task status changed',
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 2),
-            backgroundColor: AppColors.primary,
-            colorText: Colors.white);
+        AppSnackbar.showInfo('Updated', 'Task status changed');
       }
     } catch (e) {
-      Get.snackbar('Update failed', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 3),
-          backgroundColor: AppColors.error,
-          colorText: Colors.white);
+      AppSnackbar.showError('Update failed', e.toString());
     }
   }
 
@@ -114,35 +93,19 @@ class TodoController extends GetxController {
       if (_localTodoIds.contains(todo.id)) {
         _localTodoIds.remove(todo.id);
         todos.removeWhere((t) => t.id == todo.id);
-        Get.snackbar('Deleted', 'Task removed',
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 2),
-            backgroundColor: AppColors.error,
-            colorText: Colors.white);
+        AppSnackbar.showError('Deleted', 'Task removed');
         return;
       }
 
       final deleted = await _service.deleteTodo(todo.id);
       if (deleted) {
         todos.removeWhere((t) => t.id == todo.id);
-        Get.snackbar('Deleted', 'Task removed',
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 2),
-            backgroundColor: AppColors.error,
-            colorText: Colors.white);
+        AppSnackbar.showError('Deleted', 'Task removed');
       } else {
-        Get.snackbar('Delete failed', 'Server did not confirm deletion',
-            snackPosition: SnackPosition.BOTTOM,
-            duration: const Duration(seconds: 3),
-            backgroundColor: AppColors.error,
-            colorText: Colors.white);
+        AppSnackbar.showError('Delete failed', 'Server did not confirm deletion');
       }
     } catch (e) {
-      Get.snackbar('Delete failed', e.toString(),
-          snackPosition: SnackPosition.BOTTOM,
-          duration: const Duration(seconds: 3),
-          backgroundColor: AppColors.error,
-          colorText: Colors.white);
+      AppSnackbar.showError('Delete failed', e.toString());
     }
   }
 }

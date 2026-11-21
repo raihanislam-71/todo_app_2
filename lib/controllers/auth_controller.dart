@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../views/screens/home_screen.dart';
+import '../views/widgets/common/custom_snackbar.dart';
 
 class AuthController extends GetxController {
   final isLoading = false.obs;
@@ -9,11 +10,14 @@ class AuthController extends GetxController {
   // Demo-only: no authentication endpoint is provided by the Todo fake API.
   Future<void> demoLogin(String email, String password) async {
     if (!GetUtils.isEmail(email.trim())) {
-      Get.snackbar('Invalid email', 'Please enter a valid email address.');
+      AppSnackbar.showError(
+        'Invalid email',
+        'Please enter a valid email address.',
+      );
       return;
     }
     if (password.trim().length < 6) {
-      Get.snackbar(
+      AppSnackbar.showError(
         'Invalid password',
         'Password must be at least 6 characters.',
       );
@@ -23,6 +27,7 @@ class AuthController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 450));
     isLoading.value = false;
     userEmail.value = email.trim();
+    AppSnackbar.showSuccess('Success', 'Logged in successfully!');
     Get.offAll(() => const HomeScreen());
   }
 
@@ -30,7 +35,7 @@ class AuthController extends GetxController {
     if (name.trim().isEmpty ||
         !GetUtils.isEmail(email.trim()) ||
         password.length < 6) {
-      Get.snackbar(
+      AppSnackbar.showError(
         'Check your details',
         'Enter name, valid email and 6+ character password.',
       );
@@ -40,9 +45,9 @@ class AuthController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 450));
     isLoading.value = false;
     userEmail.value = email.trim();
-    Get.snackbar(
-      'Demo account',
-      'Account form validated. Authentication is not connected.',
+    AppSnackbar.showSuccess(
+      'Account Created',
+      'Account created successfully.',
     );
     Get.offAll(() => const HomeScreen());
   }
